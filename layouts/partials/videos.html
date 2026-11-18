@@ -5,9 +5,9 @@
 {{ $urlVideos := printf "%s/videos" $urlStatic }}
 
 {{ if (lt $.Params.videos 1) }}
-  <p>There are currently no videos available for {{ $.Title }}. Check back later for more or <a href="#contact">contact us</a> for specific requests!</p>
 {{ end }}
 {{ if (gt $.Params.videos 0) }}
+  <h2 id="trailers">Videos</h2>
   {{ range $.Params.videos }}
     <p>
       <strong>{{ .name }}</strong>&nbsp;
@@ -34,4 +34,5 @@
       {{ end }}
     </p>
   {{ end }}
+  <hr>
 {{ end }}

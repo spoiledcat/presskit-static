@@ -19,23 +19,23 @@
 					<h1 class="nav-header">{{ $.Title }}</h1>
 					<a class="nav-header" href="{{ $.Params.website.link }}">{{ $.Params.website.name }}</a>
 					<ul class="uk-nav uk-nav-side">
-            <li><a href="#factsheet">Factsheet</a></li>
+						<li><a href="#factsheet">Factsheet</a></li>
 						<li><a href="#description">Description</a></li>
 						<li><a href="#history">History</a></li>
 						<li><a href="#projects">Projects</a></li>
 						<li><a href="#trailers">Videos</a></li>
 						<li><a href="#images">Images</a></li>
-            <li><a href="#logo">Logo &amp; Icon</a></li>
-            <li><a href="#credits">Team</a></li>
+						<li><a href="#logo">Logo &amp; Icon</a></li>
+						<li><a href="#credits">Team</a></li>
 						<li><a href="#contact">Contact</a></li>
 					</ul>
 				</div>
 				<div id="content" class="uk-width-medium-3-4">
-          {{ $header := (readDir $pathImages) }}
-          {{ if (where $header "Name" "header.png") }}
-          <img src="{{ $urlImages }}/header.png" class="header">
-          {{ end }}
-          <div class="uk-grid">
+					{{ $header := (readDir $pathImages) }}
+					{{ if (where $header "Name" "header.png") }}
+					<img src="{{ $urlImages }}/header.png" class="header">
+					{{ end }}
+					<div class="uk-grid">
 						<div class="uk-width-medium-2-6">
 							<h2 id="factsheet">Factsheet</h2>
 							<p>
@@ -55,25 +55,25 @@
 								<strong>Press / Business contact:</strong><br/>
 								<a href="mailto:{{ $.Params.pressContact }}">{{ $.Params.pressContact }}</a>
 							</p>
-              {{ if (gt $.Params.social 0 ) }}
-                <p>
+							{{ if (gt $.Params.social 0 ) }}
+								<p>
 									<strong>Social:</strong><br/>
 									{{ range $.Params.social }}
 										<a href="{{ .link }}">{{ .name }}</a><br/>
 									{{ end }}
-                </p>
-              {{ end }}
-              {{ if (gt $.Params.releases 0 ) }}
-                <p>
+								</p>
+							{{ end }}
+							{{ if (gt $.Params.releases 0 ) }}
+								<p>
 									<strong>Releases:</strong><br />
 									{{ range $.Params.releases }}
 										<a href="{{ relref $.Page . }}">{{ ($.Site.GetPage "page" .).Title }}</a><br />
 									{{ end }}
-                </p>
-              {{ end }}
+								</p>
+							{{ end }}
 						</div>
 						<div class="uk-width-medium-4-6">
-              {{ .Content }}
+							{{ .Content }}
 							{{ if (gt $.Params.releases 0 ) }}
 							<h2 id="projects">Projects</h2>
 								<ul>
@@ -87,17 +87,9 @@
 
 					<hr>
 
-          <h2 id="trailers">Videos</h2>
-          {{ partial "videos.html" . }}
-					<hr>
-
-					<h2 id="images">Images</h2>
+					{{ partial "videos.html" . }}
 					{{ partial "images.html" . }}
-					<hr>
-
-					<h2 id="logo">Logo &amp; Icon</h2>
-          {{ partial "logos.html" . }}
-					<hr>
+					{{ partial "logos.html" . }}
 					
 					<div class="uk-grid">
 						<div class="uk-width-medium-1-2">

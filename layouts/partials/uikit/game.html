@@ -3,10 +3,23 @@
   {{ $.Scratch.Set "companyUrl" $.Site.BaseURL }}
 {{ else }}
   {{ $.Scratch.Set "company" ($.Site.GetPage "page" $.Params.company) }}
-  {{ $.Scratch.Set "companyUrl" (relref . (printf "%s.md" $.Params.company)) }}
+  {{ if $.Params.companyUrl }}
+  	{{ $.Scratch.Set "companyUrl" $.Params.companyUrl }}
+  {{ else }}
+  	{{ $.Scratch.Set "companyUrl" (relref . (printf "%s.md" $.Params.company)) }}
+  {{ end }}
+{{ end }}
+{{ if (eq $.Params.publisher "_index") }}
+  {{ $.Scratch.Set "publisher" ($.Site.GetPage "home" "") }}
+  {{ $.Scratch.Set "publisherUrl" $.Site.BaseURL }}
+{{ else }}
+  {{ $.Scratch.Set "publisher" ($.Site.GetPage "page" $.Params.publisher) }}
+  {{ $.Scratch.Set "publisherUrl" (relref . (printf "%s.md" $.Params.publisher)) }}
 {{ end }}
 {{ $company := $.Scratch.Get "company" }}
 {{ $companyUrl := $.Scratch.Get "companyUrl" }}
+{{ $publisher := $.Scratch.Get "publisher" }}
+{{ $publisherUrl := $.Scratch.Get "publisherUrl" }}
 {{ $pathImages := printf "static/%s/images/" $.Params.id }}
 {{ $urlStatic := trim (printf "%s/%s" (trim $.Site.BaseURL "/") $.Params.id) "/" }}
 {{ $urlImages := printf "%s/images" $urlStatic }}
@@ -30,13 +43,13 @@
 		<div class="uk-container uk-container-center">
 			<div class="uk-grid">
 				<div id="navigation" class="uk-width-medium-1-4">
-					<h1 class="nav-header">{{ $company.Title }}</h1>
+					<h1 class="nav-header">{{ $.Title }}</h1>
 					<a class="nav-header" href="{{ $companyUrl }}" target="_self">press kit</a></strong>
 					<ul class="uk-nav uk-nav-side">
             <li><a href="#factsheet">Factsheet</a></li>
 						<li><a href="#description">Description</a></li>
 						<li><a href="#history">History</a></li>
-						<li><a href="#projects">Projects</a></li>
+						<li><a href="#features">Features</a></li>
 						<li><a href="#trailers">Videos</a></li>
 						<li><a href="#images">Images</a></li>
             <li><a href="#logo">Logo &amp; Icon</a></li>
@@ -72,6 +85,11 @@
 								Based in {{ $company.Params.basedin }}
 							</p>
 							<p>
+								<strong>Publisher:</strong><br/>
+								<a href="{{ $publisherUrl }}">{{ $publisher.Title }}</a><br/>
+								Based in {{ $publisher.Params.basedin }}
+							</p>
+							<p>
 								<strong>Release date:</strong><br/>
 								{{ $.Params.releaseDate }}
 							</p>
@@ -79,7 +97,7 @@
                 <p>
 									<strong>Platforms:</strong><br/>
 									{{ range $.Params.platforms }}
-										{{ . }}<br/>
+										<a href="{{ .link }}">{{ .name }}</a><br/>
 									{{ end }}
                 </p>
               {{ end }}
@@ -116,13 +134,13 @@
           {{ partial "trailers.html" . }}
           <hr>
 
-          <h2 id="images">Images</h2>
           {{ partial "images.html" . }}
+
+          <h2 id="images">Animated GIFs</h2>
+          {{ partial "gifs.html" . }}
 					<hr>
 
-					<h2 id="logo">Logo &amp; Icon</h2>
           {{ partial "logos.html" . }}
-          <hr>
           
           {{ if $.Params.awards }}
             {{ if gt $.Params.awards 0 }}	
@@ -159,7 +177,7 @@
             {{ end }}
             {{ if eq $.Params.monetization "monetize" }}
               <p>
-                {{ $company.Title }} allows for the contents of {{ .Title }} to be published through video broadcasting services for any commercial or non-commercial purposes. Monetization of videos created containing assets from {{ .Title }} is legally & explicitly allowed by {{ $company.Title }}.
+                {{ $company.Title }} allows for the contents of {{ .Title }} to be published through video broadcasting services for any commercial or non-commercial purposes. Monetization of videos created containing assets from {{ .Title }} is legally & explicitly allowed by {{ $company.Title }}. This permission can be found in writing at <a href="{{ .Permalink }}">{{ .Permalink }}</a>
               </p>
             {{ end }}
           {{ end }}
@@ -173,6 +191,19 @@
 					<p>
 						<strong>More information</strong><br/>
 						More information on {{ $company.Title }}, our logo & relevant media are available <a href="{{ $companyUrl }}">here</a>.
+					</p>
+					
+					<hr>
+
+					<h2 id="about">About {{ $publisher.Title }}</h2>
+					<p>
+            <strong>Boilerplate</strong><br/>
+            {{ $publisher.Description }}
+					</p>
+
+					<p>
+						<strong>More information</strong><br/>
+						More information on {{ $publisher.Title }}, our logo & relevant media are available <a href="{{ $publisherUrl }}">here</a>.
 					</p>
 					
 					<hr>

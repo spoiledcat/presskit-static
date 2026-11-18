@@ -1,18 +1,15 @@
-{{ $pathStatic := printf "static/%s/" $.Params.id }}
-{{ $pathImages := printf "static/%s/images/" $.Params.id }}
+{{ $pathStatic := printf "static/%s" $.Params.id }}
+{{ $pathImages := printf "%s/images/" $pathStatic }}
 {{ $existsImages := where (readDir $pathStatic) "Name" "images" }}
 {{ $urlStatic := trim (printf "%s/%s" (trim $.Site.BaseURL "/") $.Params.id) "/" }}
 {{ $urlImages := printf "%s/images" $urlStatic }}
 
-{{ if (not $existsImages) }}
-  <p>There are currently no images available for {{ $.Title }}. Check back later for more or <a href="#contact">contact us</a> for specific requests!</p>
-{{ else }}
+{{ if $existsImages }}
   {{ $images := (readDir $pathImages) }}
+  {{ $existsHeader := (where $images "Name" "header.png") }}
   {{ $imagesZip := (where $images "Name" "images.zip") }}
-  {{ if (lt (len $images) 1) }}
-    <p>There are currently no images available for {{ $.Title }}. Check back later for more or <a href="#contact">contact us</a> for specific requests!</p>
-  {{ end }}
-  {{ if (gt (len $images) 0) }}
+  {{ if (and (gt (len $images) 1) ($existsHeader)) }}
+    <h2 id="images">Images</h2>
     {{ if $imagesZip }}
       {{ if (eq $.Params.style "bootstrap") }}
         <a href="{{ $urlImages }}/images.zip">
@@ -47,7 +44,7 @@
           {{ end }}
         {{ end }}
       {{ end }}
-    </div>				
-    <p class="images-text"><br/>There are far more images available for {{ .Title }}, but these are the ones we felt would be most useful to you. If you have specific requests, please do <a href="#contact">contact us</a>!</p>
+    </div>
+    <hr>
   {{ end }}
 {{ end }}
